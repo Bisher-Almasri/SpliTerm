@@ -1,10 +1,12 @@
 
 <script lang="ts">
-  import Terminal from "./Terminal.svelte";
+  import Terminal from "../components/Terminal.svelte";
+  import TerminalGroup from "../components/TerminalGroup.svelte";
 </script>
 
 <main>
-  <Terminal />
+  <!-- <Terminal /> -->
+   <TerminalGroup />
 </main>
 
 <style>
@@ -20,6 +22,6 @@
   main {
     width: 100%;
     height: 100%;
-    background: #101116;
+    background: #1c1c1c;
   }
 </style>
