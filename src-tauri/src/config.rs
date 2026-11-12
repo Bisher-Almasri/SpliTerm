@@ -1,20 +1,66 @@
-use std::{fs, path::PathBuf};
-
 use serde::{Deserialize, Serialize};
+use std::{fs, path::PathBuf};
 use tauri::{AppHandle, Manager};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(default)]
 pub struct AppConfig {
-    font_family: String,
-    font_size: i8,
+    pub font: Option<Font>,
+    pub theme: Option<Theme>,
 }
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct Font {
+    pub font_family: Option<String>,
+    pub font_size: Option<i8>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Deserialize, Serialize)]
+pub enum CursorStyle {
+    #[default]
+    Bar,
+    Underline,
+    Block,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+pub struct Theme {
+    pub background: Option<String>,
+    pub foreground: Option<String>,
+
+    pub cursor: Option<String>,
+    pub cursor_accent: Option<String>,
+    pub cursor_style: Option<CursorStyle>,
+    pub cursor_blink: Option<bool>,
+
+    pub selection_background: Option<String>,
+    pub selection_foreground: Option<String>,
+
+    pub black: Option<String>,
+    pub red: Option<String>,
+    pub green: Option<String>,
+    pub yellow: Option<String>,
+    pub blue: Option<String>,
+    pub magenta: Option<String>,
+    pub cyan: Option<String>,
+    pub white: Option<String>,
+    
+    pub bright_black: Option<String>,
+    pub bright_red: Option<String>,
+    pub bright_green: Option<String>,
+    pub bright_yellow: Option<String>,
+    pub bright_blue: Option<String>,
+    pub bright_magenta: Option<String>,
+    pub bright_cyan: Option<String>,
+    pub bright_white: Option<String>,
+}
+
 
 impl Default for AppConfig {
   fn default() -> Self {
       Self {
-          font_family: "monospaced".to_string(),
-          font_size: 16,
+          font: Some(Font { font_family: Some("monospaced".to_string()), font_size: Some(16) }),
+          theme: Some(Theme::default())
       }
   }
 }
