@@ -11,7 +11,40 @@
   }
 
   interface Config {
-    font_family: string;
+    font: {
+      font_family?: string | null;
+      font_size?: number | null;
+    };
+    theme: {
+      background?: string | null;
+      foreground?: string | null;
+
+      cursor?: string | null;
+      cursor_accent?: string | null;
+      cursor_style?: "bar" | "block" | "underline" | null;
+      cursor_blink?: boolean | null;
+
+      selection_background?: string | null;
+      selection_foreground?: string | null;
+
+      black?: string | null;
+      red?: string | null;
+      green?: string | null;
+      yellow?: string | null;
+      blue?: string | null;
+      magenta?: string | null;
+      cyan?: string | null;
+      white?: string | null;
+
+      bright_black?: string | null;
+      bright_red?: string | null;
+      bright_green?: string | null;
+      bright_yellow?: string | null;
+      bright_blue?: string | null;
+      bright_magenta?: string | null;
+      bright_cyan?: string | null;
+      bright_white?: string | null;
+    };
   }
 
   let { active = false }: Props = $props();
@@ -40,34 +73,47 @@
         const config = await invoke<Config>("get_config");
         if (destroyed) return;
 
+        const style = config.theme.cursor_style?.toLowerCase();
+
+        if (style === "bar" || style === "block" || style === "underline") {
+          config.theme.cursor_style = style;
+        }
+        
         terminal = new Terminal({
-          cursorBlink: true,
-          cursorStyle: "bar",
-          fontSize: 16,
-          fontFamily: `${config.font_family}`,
+          cursorBlink: config.theme.cursor_blink ?? true,
+          cursorStyle: config.theme.cursor_style ?? "bar",
+          fontSize: config.font.font_size ?? 16,
+          fontFamily: config.font.font_family ?? "monospace",
+          allowTransparency: true,
+
           theme: {
-            background: "#1c1c1c",
-            foreground: "#ddeedd",
-            cursor: "#e2bbef",
-            cursorAccent: "#000000",
-            selectionBackground: "#4d4d4d",
-            selectionForeground: "#ffffff",
-            black: "#3d352a",
-            red: "#cd5c5c",
-            green: "#86af80",
-            yellow: "#e8ae5b",
-            blue: "#6495ed",
-            magenta: "#deb887",
-            cyan: "#b0c4de",
-            white: "#bbaa99",
-            brightBlack: "#554444",
-            brightRed: "#cc5533",
-            brightGreen: "#88aa22",
-            brightYellow: "#ffa75d",
-            brightBlue: "#87ceeb",
-            brightMagenta: "#996600",
-            brightCyan: "#b0c4de",
-            brightWhite: "#ddccbb",
+            background: "rgba(0,0,0,0)",
+            foreground: config.theme.foreground ?? "#ddeedd",
+
+            cursor: config.theme.cursor ?? "#e2bbef",
+            cursorAccent: config.theme.cursor_accent ?? "#000000",
+
+            selectionBackground: config.theme.selection_background ?? "#4d4d4d",
+
+            selectionForeground: config.theme.selection_foreground ?? "#ffffff",
+
+            black: config.theme.black ?? "#3d352a",
+            red: config.theme.red ?? "#cd5c5c",
+            green: config.theme.green ?? "#86af80",
+            yellow: config.theme.yellow ?? "#e8ae5b",
+            blue: config.theme.blue ?? "#6495ed",
+            magenta: config.theme.magenta ?? "#deb887",
+            cyan: config.theme.cyan ?? "#b0c4de",
+            white: config.theme.white ?? "#bbaa99",
+
+            brightBlack: config.theme.bright_black ?? "#554444",
+            brightRed: config.theme.bright_red ?? "#cc5533",
+            brightGreen: config.theme.bright_green ?? "#88aa22",
+            brightYellow: config.theme.bright_yellow ?? "#ffa75d",
+            brightBlue: config.theme.bright_blue ?? "#87ceeb",
+            brightMagenta: config.theme.bright_magenta ?? "#996600",
+            brightCyan: config.theme.bright_cyan ?? "#b0c4de",
+            brightWhite: config.theme.bright_white ?? "#ddccbb",
           },
         });
 
@@ -125,16 +171,32 @@
   });
 </script>
 
-<div bind:this={container} class="terminal"></div>
+<div class="terminal">
+  <div bind:this={container} class="terminal-content"></div>
+</div>
 
 <style>
   .terminal {
     position: relative;
     width: 100%;
     height: 100%;
+    padding: 7.5px;
     box-sizing: border-box;
     overflow: hidden;
-    padding: 15px;
-    letter-spacing: 1px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .terminal-content {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .terminal :global(.xterm),
+  .terminal :global(.xterm-viewport) {
+    background-color: transparent !important;
   }
 </style>
