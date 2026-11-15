@@ -19,6 +19,8 @@
       background?: string | null;
       foreground?: string | null;
 
+      transparency?: boolean | null;
+
       cursor?: string | null;
       cursor_accent?: string | null;
       cursor_style?: "bar" | "block" | "underline" | null;
@@ -84,7 +86,7 @@
           cursorStyle: config.theme.cursor_style ?? "bar",
           fontSize: config.font.font_size ?? 16,
           fontFamily: config.font.font_family ?? "monospace",
-          allowTransparency: true,
+          allowTransparency: config.theme.transparency ?? true,
 
           theme: {
             background: "rgba(0,0,0,0)",

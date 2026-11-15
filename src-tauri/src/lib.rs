@@ -133,7 +133,7 @@ pub fn run() {
         .setup(|app| {
             let cfg = AppConfig::load_or_create(app.handle())?;
 
-            let bg_hex = cfg.theme.as_ref().and_then(|t| t.background.clone());
+            let bg_hex = cfg.theme.as_ref().and_then(|t| t.theme.as_ref()?.background.clone());
 
             app.manage(ConfigState(Mutex::new(cfg)));
 
