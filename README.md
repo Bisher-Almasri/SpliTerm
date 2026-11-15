@@ -2,6 +2,10 @@
 
 SpliTerm is a cross-platform terminal application built with [Tauri 2](https://tauri.app/), [SvelteKit](https://svelte.dev/), TypeScript, and Rust.
 
+## Screenshots
+
+![SpliTerm](./SCR-20261115-ihlw.png)
+
 Install the macOS command-line tools if needed:
 
 ```bash
